@@ -1,0 +1,22 @@
+.login-text {
+  font-family: Roboto;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 2.5rem;
+  text-align: left;
+}
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  height: calc(100vh-2rem);
+  padding: 0 100px;
+}
+.login-title {
+  font-family: Roboto;
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 5rem;
+  text-align: left;
+  color: #2c3e50;
+}

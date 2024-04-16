@@ -1,0 +1,66 @@
+ .InputField{
+  width:100%;
+  height: 60px;
+ }
+ section{
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  display: flex;
+}
+section[border='true'] {
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  font-size: 2rem;
+}
+section[border='true'].valid {
+  border-color: blue;
+}
+section[border='true'].error {
+  border-color: red;
+}
+.InputBox {
+  width: 100%;
+  border-width: 0;
+}
+input[type='search'] {
+  width: 100%;
+  height: 2rem;
+  font-size: 2rem;
+  outline: none;
+}
+input[border='true']{
+  border-width: 0px;
+}
+input[border='false'] {
+  width: 100%;
+  height: 2rem;
+  border-width: 0 0 1px;
+  border-color: black;
+  border-style: solid;
+
+  font-size: 2rem;
+}
+input[type='search']:focus {
+  border-color: blue;
+}
+
+input[type='search'].error {
+  border-color: red;
+}
+
+img {
+  width: 1.5rem;
+  height: 1.5rem;
+  align-self: center;
+}
+img.valid {
+  cursor: pointer;
+}
+.ErrorMessage {
+  color: red;
+  font-size: 1rem;
+  margin: 4px 0 0 0;
+  line-height: 0.5rem;
+}

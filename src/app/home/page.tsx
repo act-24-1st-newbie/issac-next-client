@@ -1,21 +1,27 @@
+"use client";
+import TaskList from "@/app/home/TaskList";
+import { useDetectClose } from "@/app/hooks/useDetectClose";
+import Header from "@/components/Header/Header";
+import InputField from "@/components/InputField/InputField.client";
+import { Task, taskService } from "@/services/TaskService";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "preact/hooks";
-import InputField from "../../Component/InputField/InputField.js";
-import Header from "../../Layout/Header/Header";
-import { useDetectClose } from "../../assets/hooks/useDetectClose.jsx";
+import { FC, useEffect, useRef, useState } from "react";
 import "./Home.css";
-import TaskList from "./TaskList.jsx";
-import { taskService } from "./TaskService.jsx";
-export const Home = () => {
-  const [greeting, setGreeting] = useState("");
-  const [taskNum, setTaskNum] = useState(0);
-  const [incompleteTaskNum, setIncompleteTaskNum] = useState(0);
-  const [tasks, setTasks] = useState([]);
-  const dropDownRef = useRef();
+const Home: FC = () => {
+  const [greeting, setGreeting] = useState<string>("");
+  const [taskNum, setTaskNum] = useState<number>(0);
+  const [incompleteTaskNum, setIncompleteTaskNum] = useState<number>(0);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const dropDownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useDetectClose(dropDownRef, false);
-  const [sortingMethod, setSortingMethod] = useState("Latest");
+  const [sortingMethod, setSortingMethod] = useState<string>("Latest");
   const dropdownList = ["Latest", "Oldest"];
-  const name = sessionStorage.username;
+  const [name, setName] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setName(sessionStorage.getItem("username") || null);
+    }
+  }, []);
   useEffect(() => {
     const incompleteTaskCount = tasks.filter((task) => !task.isDone).length;
     setIncompleteTaskNum(incompleteTaskCount);
@@ -27,6 +33,7 @@ export const Home = () => {
     const fetchData = async () => {
       const tasksData = await taskService.fetchTasks();
       setTasks(tasksData);
+      console.log(tasks);
     };
     fetchData();
   }, []);
@@ -52,11 +59,11 @@ export const Home = () => {
     const updatedTasks = await taskService.deleteAllTasks();
     setTasks(updatedTasks);
   };
-  const handleOnSubmit = async (text) => {
+  const handleOnSubmit = async (text: string) => {
     const updatedTasks = await taskService.addNewTask(text);
     setTasks(updatedTasks);
   };
-  const handleItemClickAndClose = (item) => {
+  const handleItemClickAndClose = (item: string) => {
     taskService.sortMethod = item;
     if (item !== sortingMethod) setTasks(tasks.reverse());
     setSortingMethod(item);
@@ -75,7 +82,6 @@ export const Home = () => {
         </h1>
         <p className="TextBox">tasks Today!</p>
         <InputField
-          className="InputField"
           placeholder="Enter your task"
           border="false"
           onSubmit={handleOnSubmit}
@@ -84,7 +90,13 @@ export const Home = () => {
       <div className="TodoListContainer">
         {taskNum === 0 ? (
           <div>
-            <img className="EmptyImage" src="img/illust_empty.png"></img>
+            <Image
+              className="EmptyImage"
+              src="/img/illust_empty.png"
+              width={100}
+              height={100}
+              alt="Empty task illustration"
+            />
             <div className="EmptyMessage">There is no task registered </div>
           </div>
         ) : (
@@ -98,7 +110,7 @@ export const Home = () => {
                   <p>{sortingMethod}</p>
                   <Image
                     src={
-                      isOpen ? "img/ic_arrow_up.png" : "img/ic_arrow_down.png"
+                      isOpen ? "/img/ic_arrow_up.png" : "/img/ic_arrow_down.png"
                     }
                     width={28}
                     height={28}

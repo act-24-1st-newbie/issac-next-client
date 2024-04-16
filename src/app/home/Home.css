@@ -143,14 +143,14 @@ ul{
   padding: 2px;
   margin: 10px;
   gap: 0.8rem;
-  background-image: url('img/btn_remove_nor.png');
+  background-image: url('/img/btn_remove_nor.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
 .TaskRemoveButton:hover {
   cursor: pointer ;
-  background-image: url('img/btn_remove_hov.png');
+  background-image: url('/img/btn_remove_hov.png');
 }
 
 .DropdownList{

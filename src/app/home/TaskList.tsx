@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState } from "preact/hooks";
-import PropTypes from "prop-types";
-import InputField from "../../Component/InputField/InputField";
-import { taskService } from "./TaskService";
-const formatDate = (date) => {
+import InputField from "@/components/InputField/InputField.client";
+import { Task, taskService } from "@/services/TaskService";
+import { FC, useEffect, useRef, useState } from "react";
+interface TaskListProps {
+  tasks: Task[];
+  setTasks: (tasks: Task[]) => void;
+}
+
+const formatDate = (date: Date): string => {
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
   const hours = date.getHours().toString().padStart(2, "0");
@@ -10,39 +14,43 @@ const formatDate = (date) => {
   return `${month}/${day} ${hours}:${minutes}`;
 };
 
-export const TaskList = ({ tasks, setTasks }) => {
-  const [editingTask, setEditingTask] = useState(null);
-  const inputRefs = useRef({});
-  const handleContentClick = (task) => {
+export const TaskList: FC<TaskListProps> = ({ tasks, setTasks }) => {
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const inputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+
+  const handleContentClick = (task: Task) => {
     setEditingTask(task);
   };
+
   useEffect(() => {
-    if (editingTask !== null) {
+    if (editingTask) {
       const inputField = inputRefs.current[editingTask.id];
-      if (inputField) {
-        inputField.focus();
-      }
+      inputField?.focus();
     }
   }, [editingTask]);
-  const handleCheckBoxClick = async (task) => {
+
+  const handleCheckBoxClick = async (task: Task) => {
     const updatedTasks = await taskService.patchTask({
       ...task,
       isDone: !task.isDone,
     });
     setTasks(updatedTasks);
   };
-  const handleSubmit = async (task, text) => {
+
+  const handleSubmit = async (task: Task, text: string) => {
     const updatedTasks = await taskService.patchTask({
       ...task,
       contents: text,
     });
     setTasks(updatedTasks);
-    setEditingTask("");
+    setEditingTask(null);
   };
-  const handleDeleteTask = async (taskId) => {
+
+  const handleDeleteTask = async (taskId: string) => {
     const updatedTasks = await taskService.deleteTask(taskId);
     setTasks(updatedTasks);
   };
+
   return (
     <div className="TodoList">
       <ul>
@@ -50,12 +58,13 @@ export const TaskList = ({ tasks, setTasks }) => {
           <li className="TaskList" key={task.id}>
             {task === editingTask ? (
               <InputField
-                ref={(el) => (inputRefs.current[task.id] = el)}
-                className="TaskContentsInput"
+                ref={(el: HTMLInputElement | null) => {
+                  inputRefs.current[task.id] = el;
+                }}
                 border="true"
                 initial_input={task.contents}
                 onSubmit={(text) => handleSubmit(task, text)}
-              ></InputField>
+              />
             ) : (
               <>
                 <input
@@ -63,7 +72,7 @@ export const TaskList = ({ tasks, setTasks }) => {
                   type="checkbox"
                   checked={task.isDone}
                   onChange={() => handleCheckBoxClick(task)}
-                ></input>
+                />
                 <div className="Task">
                   <div
                     className="TaskContents"
@@ -78,9 +87,10 @@ export const TaskList = ({ tasks, setTasks }) => {
                     {formatDate(new Date(task.createdDate))}
                   </div>
                 </div>
-                <img
-                  className="TaskRemoveButton"
+                <div
+                  className="bg-remove-nor hover:bg-remove-hov mb-2.5 ml-2.5 mr-2.5 mt-2.5 h-7 w-7 cursor-pointer bg-contain bg-center bg-no-repeat"
                   onClick={() => handleDeleteTask(task.id)}
+                  aria-label="작업 삭제"
                 />
               </>
             )}
@@ -90,8 +100,5 @@ export const TaskList = ({ tasks, setTasks }) => {
     </div>
   );
 };
-TaskList.propTypes = {
-  tasks: PropTypes.arrayOf(PropTypes.object),
-  setTasks: PropTypes.func,
-};
+
 export default TaskList;

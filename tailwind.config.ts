@@ -12,9 +12,11 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "remove-nor": "url('/img/btn_remove_nor.png')",
+        "remove-hov": "url('/img/btn_remove_hov.png')",
       },
       fontFamily: {
-        roboto: ['Roboto', 'sans-serif'],
+        roboto: ["Roboto", "sans-serif"],
       },
     },
   },

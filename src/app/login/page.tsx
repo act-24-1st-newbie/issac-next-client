@@ -1,26 +1,19 @@
 import Header from "@/components/Header/Header";
-import InputField from "@/components/InputField/InputField.client";
+import { LoginInputField } from "@/components/InputField/LoginInputField.client";
 
 const Login = () => {
-  const handleLogin = (text: String) => {
-    if (text.trim() !== '') {
-      sessionStorage.setItem('username', text.trim());
-
-    }
-  };
   return (
-
     <>
       <Header />
-      <div className="flex flex-col items-center h-[calc(100vh-2rem)] px-24">
-        <p className="font-roboto text-2xl font-normal leading-10 text-left">
+      <div className="flex h-[calc(100vh-2rem)] flex-col items-center bg-white px-24">
+        <p className="text-left font-roboto text-2xl font-normal leading-10">
           Welcome Newbie!! MyTodo makes it easy to stay organized and manage
           your life.
         </p>
-        <h1 className="font-roboto text-8xl font-bold leading-none text-left text-[#2c3e50]">
+        <h1 className="text-left font-roboto text-6xl font-bold leading-none text-[#2c3e50]">
           What is your name?
         </h1>
-        <InputField placeholder="Input your name" onSubmit={handleLogin} border="false" />
+        <LoginInputField />
       </div>
     </>
   );
